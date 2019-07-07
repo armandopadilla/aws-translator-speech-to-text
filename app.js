@@ -3,17 +3,15 @@ const _ = require('lodash');
 
 // Change out to role.
 const AWS_ACCESS_KEY = '';
-const AWS_SECRECT_KEY = '';
+const AWS_SECRET_KEY = '';
 const AWS_REGION = '';
 
 const AWSTranscribe = new AWS.TranscribeService({
     accessKeyId: AWS_ACCESS_KEY,
-    secretAccessKey:  AWS_SECRECT_KEY,
+    secretAccessKey:  AWS_SECRET_KEY,
     region: AWS_REGION
 });
 
-// Create unique jobname
-const jobName = 'armando-aws-translator-'+(new Date().getMilliseconds());
 
 exports.handler = async (event) => {
 
@@ -38,7 +36,13 @@ exports.handler = async (event) => {
     const s3Location = `https://s3-us-west-2.amazonaws.com/${bucketName}/${fileName}`;
     const originLanguage = 'en-US';
     const outputBucketName = 'armando-aws-translator-speech-to-text-results';
+
+    // Create unique jobname
+    let timestamp = new Date().getTime();
+    const jobName = `armando-aws-translator-${timestamp}`;
+
     console.log(s3Location);
+    console.log("jobname", jobName);
 
     // Transcribe from the audio!
     return AWSTranscribe
